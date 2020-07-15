@@ -69,6 +69,12 @@ build:
 	yarn lint-markdown
 	./scripts/build-site.sh
 
+.PHONY: sync
+sync:
+	@echo -e "\033[0;32mSYNC:\033[0m"
+	yarn lint-markdown
+	./scripts/sync.sh
+
 .PHONY: pulumify
 pulumify:
 	@echo -e "\033[0;32mBUILD PULUMIFY:\033[0m"
@@ -90,7 +96,8 @@ ci_push::
 	$(MAKE) banner
 	$(MAKE) ensure
 	$(MAKE) build
-	./scripts/run-pulumi.sh update production
+	$(MAKE) sync
+	./scripts/run-pulumi.sh update
 
 .PHONY: ci_pull_request
 ci_pull_request::
@@ -98,7 +105,7 @@ ci_pull_request::
 	$(MAKE) ensure
 	$(MAKE) build
 	$(MAKE) test
-	./scripts/run-pulumi.sh preview production
+	./scripts/run-pulumi.sh preview
 
 .PHONY: ci_schedule
 ci_schedule::
